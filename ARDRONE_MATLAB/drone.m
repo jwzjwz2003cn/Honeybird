@@ -33,7 +33,7 @@ classdef drone < handle
             obj.vx = 0;
             obj.vy = 0;
             obj.vz = 0;
-			obj.kinect = Kinect_RadarBBOX;
+			%obj.kinect = Kinect_RadarBBOX;
             
         end
 		
@@ -445,7 +445,11 @@ classdef drone < handle
             obj.reset_ports;
             obj.vz = obj.ARnav.decode_vz; 
         end
-
+        
+        function track_roundel(obj)
+            obj.reset_wdg();
+            obj.ARcontrol.at_flymode();
+        end
     end
     
 end
