@@ -22,7 +22,7 @@ function varargout = drone_gui(varargin)
 
 % Edit the above text to modify the response to help drone_gui
 
-% Last Modified by GUIDE v2.5 27-Jan-2013 18:04:23
+% Last Modified by GUIDE v2.5 03-Feb-2013 18:31:17
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -148,9 +148,9 @@ global droneObject;
 display('Move Right');
 droneObject.roll_right(0.5);
 
-% --- Executes on button press in moveBackwardsButton.
+% --- Executes on button press in moveBackwardButton.
 function moveBackwardButton_Callback(hObject, eventdata, handles)
-% hObject    handle to moveBackwardsButton (see GCBO)
+% hObject    handle to moveBackwardButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global droneObject;
@@ -210,7 +210,9 @@ function batteryCheckButton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global droneObject;
 droneObject.get_battery;
-droneObject.battery
+bat = droneObject.battery;
+set(debugOutput_text, bat);
+
 
 
 % --- Executes on button press in roundelTrackButton.
@@ -285,3 +287,32 @@ end
 if get(handles.droneGui,'currentcharacter') == 'b';
     batteryCheckButton_Callback(hObject, eventdata, handles);
 end
+
+function debugOutput_Text_Callback(hObject, eventdata, handles)
+% hObject    handle to debugOutput_Text (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of debugOutput_Text as text
+%        str2double(get(hObject,'String')) returns contents of debugOutput_Text as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function debugOutput_Text_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to debugOutput_Text (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+%%
+
+
+% --- Executes on button press in moveBackwardButton.
+function moveBackwardButton_Callback(hObject, eventdata, handles)
+% hObject    handle to moveBackwardButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
