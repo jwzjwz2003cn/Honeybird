@@ -64,7 +64,7 @@ classdef control < handle
         
         function at_flymode(obj)
             fly_mode = 2;
-            cat_type = 12;% or 5
+            cat_type = 5;% or 5
             AR_CAD_CONFIG = sprintf('AT*CONFIG=605,\"detect:detect_type\", \"%u\"\r', cat_type);
             AR_FMODE_CONFIG = sprintf('AT*CONFIG=605,\"control:flying_mode\",\"%u\"\r',fly_mode);
             obj.pause_wdg(0.01);
