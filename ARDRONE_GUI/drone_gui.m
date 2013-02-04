@@ -22,7 +22,7 @@ function varargout = drone_gui(varargin)
 
 % Edit the above text to modify the response to help drone_gui
 
-% Last Modified by GUIDE v2.5 03-Feb-2013 18:31:17
+% Last Modified by GUIDE v2.5 03-Feb-2013 19:39:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -127,8 +127,8 @@ function moveForwardButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global droneObject;
-display('Move Forward');
 droneObject.move_forward(0.5);
+set(handles.debugOutput_Text, 'string', 'Move Forward');
 
 % --- Executes on button press in moveLeftButton.
 function moveLeftButton_Callback(hObject, eventdata, handles)
@@ -136,8 +136,8 @@ function moveLeftButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global droneObject;
-display('Move Left');
 droneObject.roll_left(0.5);
+set(handles.debugOutput_Text, 'string', 'Move Left');
 
 % --- Executes on button press in moveRightButton.
 function moveRightButton_Callback(hObject, eventdata, handles)
@@ -145,8 +145,10 @@ function moveRightButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global droneObject;
-display('Move Right');
 droneObject.roll_right(0.5);
+d = datestr(clock);
+m = { strcat(d, '    Move Right') };
+set(handles.debugOutput_Text, 'string', cat(1, m, get(handles.debugOutput_Text, 'string')) );
 
 % --- Executes on button press in moveBackwardButton.
 function moveBackwardButton_Callback(hObject, eventdata, handles)
@@ -154,8 +156,8 @@ function moveBackwardButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global droneObject;
-display('Move Backward');
 droneObject.move_backward(0.5);
+set(handles.debugOutput_Text, 'string', 'Move Backward');
 
 % --- Executes on button press in moveUpButton.
 function moveUpButton_Callback(hObject, eventdata, handles)
@@ -210,8 +212,8 @@ function batteryCheckButton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global droneObject;
 droneObject.get_battery;
-bat = droneObject.battery;
-set(debugOutput_text, bat);
+droneObject.battery
+
 
 
 
@@ -311,8 +313,19 @@ end
 %%
 
 
-% --- Executes on button press in moveBackwardButton.
-function moveBackwardButton_Callback(hObject, eventdata, handles)
-% hObject    handle to moveBackwardButton (see GCBO)
+% --- Executes on button press in safeClose_Button.
+function safeClose_Button_Callback(hObject, eventdata, handles)
+% hObject    handle to safeClose_Button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+delete(handles.droneGui)
+
+
+% --- Executes on button press in height_Button.
+function height_Button_Callback(hObject, eventdata, handles)
+% hObject    handle to height_Button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global droneObject;
+display('Height 1 meter');
+droneObject.z_moveTo( 1000 );
