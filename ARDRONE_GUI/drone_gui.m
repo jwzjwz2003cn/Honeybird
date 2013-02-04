@@ -210,7 +210,9 @@ function batteryCheckButton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global droneObject;
 droneObject.get_battery;
-droneObject.battery
+bat = droneObject.battery;
+set(debugOutput_text, bat);
+
 
 
 % --- Executes on button press in roundelTrackButton.
