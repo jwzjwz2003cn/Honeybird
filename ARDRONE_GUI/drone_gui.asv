@@ -303,10 +303,10 @@ height = str2double(get(handles.heightEditBox, 'string'));
 if( height < 500 || height > 2000 )
     return
 end
-
-disp(['Height ' num2str(height/1000) ' meters'])
+disp(['Height ' + num2str(height/1000) + ' meters'])
 global droneObject;
-droneObject.z_moveTo( height );
+disp(['Height ' + num2str(height/1000) + ' meters'])
+droneObject.z_moveTo( 1000 );
 
 %Function that sends all the commands
 function controlCenter(action, handles)
