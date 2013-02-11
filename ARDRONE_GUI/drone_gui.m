@@ -67,6 +67,7 @@ droneObject = drone;
 % uiwait(handles.droneGui);
 
 
+
 % --- Outputs from this function are returned to the command line.
 function varargout = drone_gui_OutputFcn(~, ~, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
@@ -90,21 +91,30 @@ function takeOffButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 controlCenter('takeOff', handles);
+global flagger;
+flagger = true;
+i = 0;
+    while( flagger )
+        disp( num2str(i) );
+        i = i + 1;
+    end
 
-% --- Executes on button press in landButton.
-function landButton_Callback(hObject, eventdata, handles)
-% hObject    handle to landButton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global droneObject;
-display('Land')
-droneObject.land;
+    % --- Executes on button press in landButton.
+    function landButton_Callback(hObject, eventdata, handles)
+    % hObject    handle to landButton (see GCBO)
+    % eventdata  reserved - to be defined in a future version of MATLAB
+    % handles    structure with handles and user data (see GUIDATA)
+    flagger = false;
+
+    global droneObject;
+    display('Land');
+    droneObject.land;
+    
+
 
 % --- Executes on button press in calibrateButton.
 function calibrateButton_Callback(hObject, eventdata, handles)
-% hObject    handle to calibrateButton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 
 % --- Executes on button press in moveForwardButton.
 function moveForwardButton_Callback(hObject, eventdata, handles)
@@ -115,6 +125,7 @@ global droneObject;
 droneObject.move_forward(0.5);
 set(handles.debugOutput_Text, 'string', 'Move Forward');
 
+
 % --- Executes on button press in moveLeftButton.
 function moveLeftButton_Callback(hObject, eventdata, handles)
 % hObject    handle to moveLeftButton (see GCBO)
@@ -124,12 +135,14 @@ global droneObject;
 droneObject.roll_left(0.5);
 set(handles.debugOutput_Text, 'string', 'Move Left');
 
+
 % --- Executes on button press in moveRightButton.
 function moveRightButton_Callback(hObject, eventdata, handles)
 % hObject    handle to moveRightButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 controlCenter('moveRight', handles);
+
 
 % --- Executes on button press in moveBackwardButton.
 function moveBackwardButton_Callback(hObject, eventdata, handles)
@@ -140,6 +153,7 @@ global droneObject;
 droneObject.move_backward(0.5);
 set(handles.debugOutput_Text, 'string', 'Move Backward');
 
+
 % --- Executes on button press in moveUpButton.
 function moveUpButton_Callback(hObject, eventdata, handles)
 % hObject    handle to moveUpButton (see GCBO)
@@ -148,6 +162,7 @@ function moveUpButton_Callback(hObject, eventdata, handles)
 global droneObject;
 display('Move Up');
 droneObject.go_up(0.5);
+
 
 % --- Executes on button press in rotateClockwiseButton.
 function rotateClockwiseButton_Callback(hObject, eventdata, handles)
@@ -158,6 +173,7 @@ global droneObject;
 display('Counter Clockwise');
 droneObject.rotate_right(0.5);
 
+
 % --- Executes on button press in rotateCounterClockwiseButton.
 function rotateCounterClockwiseButton_Callback(hObject, eventdata, handles)
 % hObject    handle to rotateCounterClockwiseButton (see GCBO)
@@ -166,6 +182,7 @@ function rotateCounterClockwiseButton_Callback(hObject, eventdata, handles)
 global droneObject;
 display('Rotate Counter Clockwise');
 droneObject.rotate_left(0.5);
+
 
 % --- Executes on button press in moveDownButton.
 function moveDownButton_Callback(hObject, eventdata, handles)
@@ -180,6 +197,7 @@ m = { strcat(d, '    Move Down') };
 set(handles.debugOutput_Text, 'string', cat(1, m, get(handles.debugOutput_Text, 'string')) );
 
 
+
 % --- Executes on button press in flatTrimButton.
 function flatTrimButton_Callback(hObject, eventdata, handles)
 % hObject    handle to flatTrimButton (see GCBO)
@@ -188,6 +206,7 @@ function flatTrimButton_Callback(hObject, eventdata, handles)
 global droneObject;
 display('Flat Trim');
 droneObject.ftrim;
+
 
 
 % --- Executes on button press in batteryCheckButton.
@@ -200,6 +219,7 @@ droneObject.get_battery;
 set(handles.batteryEditText, 'string', droneObject.battery);
 
 
+
 % --- Executes on button press in roundelTrackButton.
 function roundelTrackButton_Callback(hObject, eventdata, handles)
 % hObject    handle to roundelTrackButton (see GCBO)
@@ -208,6 +228,7 @@ function roundelTrackButton_Callback(hObject, eventdata, handles)
 global droneObject;
 display('Track Roundel');
 droneObject.track_roundel;
+
 
 
 % --- Executes on button press in closeConnectionButton.
@@ -220,6 +241,7 @@ display('Close Connection');
 droneObject.terminate;
 
 
+
 % --- Executes on key press with focus on droneGui or any of its controls.
 function droneGui_WindowKeyPressFcn(hObject, eventdata, handles)
 % hObject    handle to droneGui (see GCBO)
@@ -229,70 +251,60 @@ function droneGui_WindowKeyPressFcn(hObject, eventdata, handles)
 %	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
 % handles    structure with handles and user data (see GUIDATA)
 % --- Executes on key press with focus on moveRightButton and none of its controls.
-if get(handles.droneGui,'currentcharacter') == 'w';
-    moveForwardButton_Callback(hObject, eventdata, handles);
-end
+    if get(handles.droneGui,'currentcharacter') == 'w';
+        moveForwardButton_Callback(hObject, eventdata, handles);
+    end
 
-if get(handles.droneGui,'currentcharacter') == 'd';
-    moveRightButton_Callback(hObject, eventdata, handles);
-end
+    if get(handles.droneGui,'currentcharacter') == 'd';
+        moveRightButton_Callback(hObject, eventdata, handles);
+    end
 
-if get(handles.droneGui,'currentcharacter') == 'a';
-    moveLeftButton_Callback(hObject, eventdata, handles);
-end
+    if get(handles.droneGui,'currentcharacter') == 'a';
+        moveLeftButton_Callback(hObject, eventdata, handles);
+    end
 
-if get(handles.droneGui,'currentcharacter') == 's';
-    moveBackwardButton_Callback(hObject, eventdata, handles);
-end
+    if get(handles.droneGui,'currentcharacter') == 's';
+        moveBackwardButton_Callback(hObject, eventdata, handles);
+    end
 
-if get(handles.droneGui,'currentcharacter') == 'q';
-    rotateClockwiseButton_Callback(hObject, eventdata, handles);
-end
+    if get(handles.droneGui,'currentcharacter') == 'q';
+        rotateClockwiseButton_Callback(hObject, eventdata, handles);
+    end
 
-if get(handles.droneGui,'currentcharacter') == 'e';
-    rotateCounterClockwiseButton_Callback(hObject, eventdata, handles);
-end
+    if get(handles.droneGui,'currentcharacter') == 'e';
+        rotateCounterClockwiseButton_Callback(hObject, eventdata, handles);
+    end
 
-if get(handles.droneGui,'currentcharacter') == 'r';
-    moveUpButton_Callback(hObject, eventdata, handles);
-end
+    if get(handles.droneGui,'currentcharacter') == 'r';
+        moveUpButton_Callback(hObject, eventdata, handles);
+    end
 
-if get(handles.droneGui,'currentcharacter') == 'f';
-    moveDownButton_Callback(hObject, eventdata, handles);
-end
+    if get(handles.droneGui,'currentcharacter') == 'f';
+        moveDownButton_Callback(hObject, eventdata, handles);
+    end
 
-if get(handles.droneGui,'currentcharacter') == 't';
-    takeOffButton_Callback(hObject, eventdata, handles);
-end
+    if get(handles.droneGui,'currentcharacter') == 't';
+        takeOffButton_Callback(hObject, eventdata, handles);
+    end
 
-if get(handles.droneGui,'currentcharacter') == 'l';
-    landButton_Callback(hObject, eventdata, handles);
-end
+    if get(handles.droneGui,'currentcharacter') == 'l';
+        landButton_Callback(hObject, eventdata, handles);
+    end
 
-if get(handles.droneGui,'currentcharacter') == 'b';
-    batteryCheckButton_Callback(hObject, eventdata, handles);
-end
+    if get(handles.droneGui,'currentcharacter') == 'b';
+        batteryCheckButton_Callback(hObject, eventdata, handles);
+    end
 
-function debugOutput_Text_Callback(hObject, eventdata, handles)
-% hObject    handle to debugOutput_Text (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% Hints: get(hObject,'String') returns contents of debugOutput_Text as text
-%        str2double(get(hObject,'String')) returns contents of debugOutput_Text as a double
-
-
+    
 % --- Executes during object creation, after setting all properties.
 function debugOutput_Text_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to debugOutput_Text (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-%%
+
+function debugOutput_Text_Callback(hObject, eventdata, handles)
+
 
 % --- Executes on button press in height_Button.
 function height_Button_Callback(hObject, eventdata, handles)
@@ -300,13 +312,14 @@ function height_Button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 height = str2double(get(handles.heightEditBox, 'string'));
-if( height < 500 || height > 2000 )
-    return
-end
+    if( height < 500 || height > 2000 )
+        return
+    end
 
 disp(['Height ' num2str(height/1000) ' meters'])
 global droneObject;
 droneObject.z_moveTo( height );
+
 
 %Function that sends all the commands
 function controlCenter(action, handles)
@@ -314,68 +327,50 @@ function controlCenter(action, handles)
 global droneObject;
 dateString = datestr(clock);
 
-if( strcmp(action,'resetDrone') )
-    actionMessage = { strcat( dateString, '        Reset Drone') };
-    display('Reset Drone');
-    droneObject.reset;    
-elseif( strcmp(action, 'takeOff') )
-    actionMessage = { strcat( dateString, '        Take Off') };
-    display('Take Off');
-    droneObject.takeoff;
-elseif( strcmp(action, 'moveRight') )
-    actionMessage = { strcat( dateString, '        Move Right') };
-    display('Move Right');
-    droneObject.roll_right(0.5);           
-end
+    if( strcmp(action,'resetDrone') )
+        actionMessage = { strcat( dateString, '        Reset Drone') };
+        display('Reset Drone');
+        droneObject.reset;    
+    elseif( strcmp(action, 'takeOff') )
+        actionMessage = { strcat( dateString, '        Take Off') };
+        display('Take Off');
+        droneObject.takeoff;
+    elseif( strcmp(action, 'moveRight') )
+        actionMessage = { strcat( dateString, '        Move Right') };
+        display('Move Right');
+        droneObject.roll_right(0.5);           
+    end
 
 set(handles.debugOutput_Text, 'string', cat(1, actionMessage, get(handles.debugOutput_Text, 'string')) );
+
+
 
 % --- Executes on button press in calibrateCheckBox.
 function calibrateCheckBox_Callback(hObject, eventdata, handles)
 % hObject    handle to calibrateCheckBox (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
 % Hint: get(hObject,'Value') returns toggle state of calibrateCheckBox
 
 
-function batteryEditText_Callback(hObject, eventdata, handles)
-% hObject    handle to batteryEditText (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% Hints: get(hObject,'String') returns contents of batteryEditText as text
-%        str2double(get(hObject,'String')) returns contents of batteryEditText as a double
-
 % --- Executes during object creation, after setting all properties.
 function batteryEditText_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to batteryEditText (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
 
 
-
-function heightEditBox_Callback(hObject, eventdata, handles)
-% hObject    handle to heightEditBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of heightEditBox as text
-%        str2double(get(hObject,'String')) returns contents of heightEditBox as a double
+function batteryEditBox_Callback(hObject, eventdata, handles)
 
 
 % --- Executes during object creation, after setting all properties.
 function heightEditBox_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to heightEditBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
+
+function heightEditBox_Callback(hObject, eventdata, handles)
+
+
+

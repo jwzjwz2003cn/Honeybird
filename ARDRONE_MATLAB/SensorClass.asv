@@ -4,6 +4,10 @@ classdef SensorClass < handle
         hblob;
         Dn;
     end
+    properties (SetAccess = public)
+    D;
+    end
+    
     
     methods
         %constructor
@@ -83,6 +87,9 @@ classdef SensorClass < handle
                         positionDB(j,4)];
                     end
                 end
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             end
         end
         %Disconnect from Kinect (rarely used)
