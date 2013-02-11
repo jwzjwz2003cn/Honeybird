@@ -62,12 +62,23 @@ classdef control < handle
         
         function at_flymode(obj)
             fly_mode = 2;
-            cat_type = 5;% or 5
+            tag_type = 8;% or 3 or 2
+            cad_type = 5;
+            multi_tracking = 10;
             %AR_CAD_CONFIG = sprintf('AT*CONFIG=605,\"detect:detect_type\", \"%u\"\r', cat_type);
-            AR_CAD_CONFIG = sprintf('AT*CONFIG=605,\"detect:detect_type\","5"\r', cat_type);
+            range = 2500;
+            AR_CAD_CONFIG4 = sprintf('AT*CONFIG=605,\"control:hovering_range\","%u\"\r', range);
+            AR_CAD_CONFIG5 = sprintf('AT*CONFIG=605,\"detect:detect_type\","%u\"\r', multi_tracking);
+            AR_CAD_CONFIG3 = sprintf('AT*CONFIG=605,\"detect:detect_type\","%u\"\r', cad_type);
+            AR_CAD_CONFIG2 = sprintf('AT*CONFIG=605,\"control:flight_without_shell\","TRUE\"\r');
+            AR_CAD_CONFIG = sprintf('AT*CONFIG=605,\"detection_select_v\","%u\"\r', tag_type);
             AR_FMODE_CONFIG = sprintf('AT*CONFIG=605,\"control:flying_mode\",\"%u\"\r',fly_mode);
             obj.pause_wdg(0.01);
+            obj.sendcmd(AR_CAD_CONFIG2);
             obj.sendcmd(AR_CAD_CONFIG);
+            obj.sendcmd(AR_CAD_CONFIG3);
+            obj.sendcmd(AR_CAD_CONFIG4);
+            obj.sendcmd(AR_CAD_CONFIG5);
             obj.sendcmd(AR_FMODE_CONFIG);
         end
         

@@ -30,7 +30,7 @@ while( dist_conf( x, goal) > 0.15 ) % while each of the 3 control points is more
     x = x + u1 + u2 + u3
     
     x_work = trans_conf_work( x );  %
-%    plot3( x_work(:,1), x_work(:,2), x_work(:,3) );
+    plot3( x_work(:,1), x_work(:,2), x_work(:,3) );
     t(count,:) =  x_work(1,:);  %plot drone's head only
     dist_conf( x, goal );
     
