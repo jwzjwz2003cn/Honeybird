@@ -22,7 +22,7 @@ function varargout = drone_gui(varargin)
 
 % Edit the above text to modify the response to help drone_gui
 
-% Last Modified by GUIDE v2.5 03-Feb-2013 19:39:49
+% Last Modified by GUIDE v2.5 10-Feb-2013 19:23:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -45,7 +45,7 @@ end
 
 
 % --- Executes just before drone_gui is made visible.
-function drone_gui_OpeningFcn(hObject, eventdata, handles, varargin)
+function drone_gui_OpeningFcn(hObject, ~, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -68,7 +68,7 @@ droneObject = drone;
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = drone_gui_OutputFcn(hObject, eventdata, handles) 
+function varargout = drone_gui_OutputFcn(~, ~, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -86,13 +86,11 @@ function configurationButton_Callback(hObject, eventdata, handles)
 
 
 % --- Executes on button press in resetDroneButton.
-function resetDroneButton_Callback(hObject, eventdata, handles)
+function resetDroneButton_Callback(~, ~, ~)
 % hObject    handle to resetDroneButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global droneObject;
-display('Reset Drone');
-droneObject.reset;
+controlCenter('resetDrone');
 
 
 % --- Executes on button press in takeOffButton.
@@ -212,9 +210,7 @@ function batteryCheckButton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global droneObject;
 droneObject.get_battery;
-droneObject.battery
-
-
+set(handles.batteryEditText, 'string', droneObject.battery);
 
 
 % --- Executes on button press in roundelTrackButton.
@@ -312,15 +308,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 %%
 
-
-% --- Executes on button press in safeClose_Button.
-function safeClose_Button_Callback(hObject, eventdata, handles)
-% hObject    handle to safeClose_Button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-delete(handles.droneGui)
-
-
 % --- Executes on button press in height_Button.
 function height_Button_Callback(hObject, eventdata, handles)
 % hObject    handle to height_Button (see GCBO)
@@ -329,3 +316,73 @@ function height_Button_Callback(hObject, eventdata, handles)
 global droneObject;
 display('Height 1 meter');
 droneObject.z_moveTo( 1000 );
+
+%Function that sends all the commands
+function controlCenter(action)
+
+global droneObject;
+dateString = datestr(clock);
+
+if( strcmp(action,'resetDrone') )
+    actionMessage = strcat( dateString, '        resetDrone');
+    display('Reset Drone');
+    droneObject.reset;    
+end
+
+messageText = { strcat(dateString, actionMessage) };
+set(handles.debugOutput_Text, 'string', cat(1, messageText, get(handles.debugOutput_Text, 'string')) );
+
+
+% --- Executes on button press in calibrateCheckBox.
+function calibrateCheckBox_Callback(hObject, eventdata, handles)
+% hObject    handle to calibrateCheckBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of calibrateCheckBox
+
+
+
+function batteryEditText_Callback(hObject, eventdata, handles)
+% hObject    handle to batteryEditText (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of batteryEditText as text
+%        str2double(get(hObject,'String')) returns contents of batteryEditText as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function batteryEditText_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to batteryEditText (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function HeightEditBox_Callback(hObject, eventdata, handles)
+% hObject    handle to HeightEditBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of HeightEditBox as text
+%        str2double(get(hObject,'String')) returns contents of HeightEditBox as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function HeightEditBox_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to HeightEditBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

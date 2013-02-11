@@ -30,7 +30,7 @@ classdef SensorClass < handle
             KR.Dn=mxNiDepth(KR.SensorHandles);
         end
         %obtain the drone and ball position
-        function [positionD, postionB] = TrackFrame(KR)
+        function [positionD, positionB] = TrackFrame(KR)
             
             mxNiUpdateContext(KR.SensorHandles);
             
@@ -74,7 +74,7 @@ classdef SensorClass < handle
                 if (length(positionDB(:,1)) == 1)
                     positionB = [];
                 else
-                    positionB = zeros(3,length(centroid(:,1))-1)
+                    positionB = zeros(3,length(centroid(:,1))-1);
                     
                     for j = 2:length(centroid(:,1))
                         positionB(:,j-1) = [positionDB(j,2); ...
