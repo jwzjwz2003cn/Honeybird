@@ -1,17 +1,18 @@
-classdef SensorClass < handle
+classdef SensorClassBBOX < handle
     properties (SetAccess = private)
         SensorHandles;
         hblob;
         Dn;
+        hshapeins;
+        h1;
+        htextinsX;
+        htextinsY;
+        htextinsZ;
     end
-    properties (SetAccess = public)
-    D;
-    end
-    
     
     methods
         %constructor
-        function KR = SensorClass(s)
+        function KR = SensorClassBBOX(s)
             %   s is a path directory to a config xml file and can be something like 
             %   'D:\Michael\Fourth Year Design Project\Kinect_Matlab_version1f\Config\SamplesConfig.xml'
             %   the apostrophes should be included in s
@@ -25,10 +26,36 @@ classdef SensorClass < handle
                 'BoundingBoxOutputPort', true, ...
                 'OutputDataType', 'single', ...
                 'MaximumCount', 2, ...
-                'MinimumBlobArea', 0, ...
+                'MinimumBlobArea', 5, ...
                 'MaximumBlobArea', intmax ...
                 );		
+            
             KR.Dn=mxNiDepth(KR.SensorHandles);
+            
+            KR.hshapeins = vision.ShapeInserter( ...
+                'BorderColor', 'Custom', ...
+                'CustomBorderColor', 65535);
+            
+            KR.htextinsX = vision.TextInserter( ...
+                'Text', '%4d', ...
+                'Location',  [1 1], ...
+                'Color', [255 255 255], ...
+                'FontSize', 16);
+            
+            KR.htextinsY = vision.TextInserter( ...
+                'Text', '%4d', ...
+                'Location',  [1 30], ...
+                'Color', [255 255 255], ...
+                'FontSize', 16);
+            
+            KR.htextinsZ = vision.TextInserter( ...
+                'Text', '%4d', ...
+                'Location',  [1 60], ...
+                'Color', [255 255 255], ...
+                'FontSize', 16);
+            Depth=KR.Dn;
+            Depth=permute(Depth,[2 1]);
+            subplot(1,1,1),KR.h1=imshow(Depth,[0 9000]); colormap();
         end
         %calibrate background
         function Calibrate(KR)
@@ -87,10 +114,15 @@ classdef SensorClass < handle
                         positionDB(j,4)];
                     end
                 end
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             end
+            Depth = step(KR.hshapeins, Depth, bboxD);
+            Depth = permute(Depth,[2 1]);
+            text = int16(positionD);
+            Depth = step(KR.htextinsX, Depth, text(1));
+            Depth = step(KR.htextinsY, Depth, text(2));
+            Depth = step(KR.htextinsZ, Depth, text(3));
+            set(KR.h1,'CDATA',Depth);
+            drawnow;
         end
         %Disconnect from Kinect (rarely used)
         function CloseConnection(KR)

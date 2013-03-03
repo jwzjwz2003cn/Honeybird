@@ -166,40 +166,44 @@ function moveDownButton_Callback(~, ~, handles)
 controlCenter('moveDown', handles);
 
 % --- Executes on button press in flatTrimButton.
-function flatTrimButton_Callback(~, ~, handles)
+function flatTrimButton_Callback(hObject, eventdata, handles)
 % hObject    handle to flatTrimButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 controlCenter('flatTrim', handles);
 
 % --- Executes on button press in batteryCheckButton.
-function batteryCheckButton_Callback(~, ~, handles)
+function batteryCheckButton_Callback(hObject, eventdata, handles)
 % hObject    handle to batteryCheckButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-controlCenter('batteryCheck', handles);
+global droneObject;
+droneObject.get_battery;
+set(handles.batteryEditText, 'string', droneObject.battery);
 
-% --- Executes during object creation, after setting all properties.
-function batteryEditText_CreateFcn(hObject, ~, ~)
-    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-        set(hObject,'BackgroundColor','white');
-    end
 
-function batteryEditBox_Callback(~, ~, ~)
 
 % --- Executes on button press in roundelTrackButton.
-function roundelTrackButton_Callback(~, ~, ~)
+function roundelTrackButton_Callback(hObject, eventdata, handles)
 % hObject    handle to roundelTrackButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-controlCenter('trackRoundel');
+global droneObject;
+display('Track Roundel');
+droneObject.track_roundel;
+
+
 
 % --- Executes on button press in closeConnectionButton.
-function closeConnectionButton_Callback(~, ~, ~)
+function closeConnectionButton_Callback(hObject, eventdata, handles)
 % hObject    handle to closeConnectionButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-controlCenter('closeConnection');
+global droneObject;
+display('Close Connection');
+droneObject.terminate;
+
+
 
 % --- Executes on key press with focus on droneGui or any of its controls.
 function droneGui_WindowKeyPressFcn(hObject, eventdata, handles)
@@ -253,17 +257,19 @@ function droneGui_WindowKeyPressFcn(hObject, eventdata, handles)
     if get(handles.droneGui,'currentcharacter') == 'b';
         batteryCheckButton_Callback(hObject, eventdata, handles);
     end
- 
+
+    
 % --- Executes during object creation, after setting all properties.
-function debugOutput_Text_CreateFcn(hObject, ~, ~)
+function debugOutput_Text_CreateFcn(hObject, eventdata, handles)
     if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
         set(hObject,'BackgroundColor','white');
     end
 
-function debugOutput_Text_Callback(~, ~, ~)
+function debugOutput_Text_Callback(hObject, eventdata, handles)
+
 
 % --- Executes on button press in height_Button.
-function height_Button_Callback(~, ~, handles)
+function height_Button_Callback(hObject, eventdata, handles)
 % hObject    handle to height_Button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -276,13 +282,6 @@ disp(['Height ' num2str(height/1000) ' meters'])
 global droneObject;
 droneObject.z_moveTo( height );
 
-% --- Executes during object creation, after setting all properties.
-function heightEditBox_CreateFcn(hObject, ~, ~)
-    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-        set(hObject,'BackgroundColor','white');
-    end
-
-function heightEditBox_Callback(~, ~, ~)
 
 %Function that sends all the commands
 function controlCenter(action, handles)
@@ -326,22 +325,28 @@ dateString = datestr(clock);
     elseif( strcmp(action, 'flatTrim') )
         actionMessage = { strcat( dateString, '        Flat Trim') };
         droneObject.ftrim;
-    elseif( strcmp(action, 'batteryCheck') )
-        actionMessage = { strcat( dateString, '        Battery Check') };
-        droneObject.get_battery;
-        set(handles.batteryEditText, 'string', droneObject.battery);
-    elseif( strcmp(action, 'trackRoundel') )
-        actionMessage = { strcat( dateString, '        Track Roundel') };
-        droneObject.track_roundel;
-    elseif( strcmp(action, 'closeConnection') )
-        actionMessage = { strcat( dateString, '        Close COnnection') };
-        droneObject.terminate;
     end
 
 display(action);
 set(handles.debugOutput_Text, 'string', cat(1, actionMessage, get(handles.debugOutput_Text, 'string')) );
 
 
+% --- Executes during object creation, after setting all properties.
+function batteryEditText_CreateFcn(hObject, eventdata, handles)
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+
+function batteryEditBox_Callback(hObject, eventdata, handles)
+
+% --- Executes during object creation, after setting all properties.
+function heightEditBox_CreateFcn(hObject, eventdata, handles)
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+
+
+function heightEditBox_Callback(hObject, eventdata, handles)
 
 
 

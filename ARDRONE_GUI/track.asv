@@ -1,0 +1,7 @@
+function track(KR)
+for j=1:300
+    disp('-----');
+    tic
+    [posD[j], posB[j]] = TrackFrame(KR)
+    toc
+end
