@@ -185,7 +185,7 @@ classdef drone < handle
 				end
 				
 				% Out of Range
-				if(z_pos < 300 || z_pos > 2000)
+				if(z_setting < 300 || z_setting > 2000)
 					z_setting = 0;
 				end
 				

@@ -66,11 +66,11 @@ classdef control < handle
             cad_type = 5;
             multi_tracking = 10;
             %AR_CAD_CONFIG = sprintf('AT*CONFIG=605,\"detect:detect_type\", \"%u\"\r', cat_type);
-            range = 2500;
+            range = 3000;
             AR_CAD_CONFIG4 = sprintf('AT*CONFIG=605,\"control:hovering_range\","%u\"\r', range);
             AR_CAD_CONFIG5 = sprintf('AT*CONFIG=605,\"detect:detect_type\","%u\"\r', multi_tracking);
             AR_CAD_CONFIG3 = sprintf('AT*CONFIG=605,\"detect:detect_type\","%u\"\r', cad_type);
-            AR_CAD_CONFIG2 = sprintf('AT*CONFIG=605,\"control:flight_without_shell\","TRUE\"\r');
+            AR_CAD_CONFIG2 = sprintf('AT*CONFIG=605,\"control:flight_without_shell\","FALSE\"\r');
             AR_CAD_CONFIG = sprintf('AT*CONFIG=605,\"detection_select_v\","%u\"\r', tag_type);
             AR_FMODE_CONFIG = sprintf('AT*CONFIG=605,\"control:flying_mode\",\"%u\"\r',fly_mode);
             obj.pause_wdg(0.01);
