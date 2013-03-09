@@ -5,9 +5,6 @@ classdef SensorClassBBOX < handle
         Dn;
         hshapeins;
         h1;
-        htextinsX;
-        htextinsY;
-        htextinsZ;
     end
     
     methods
@@ -26,7 +23,7 @@ classdef SensorClassBBOX < handle
                 'BoundingBoxOutputPort', true, ...
                 'OutputDataType', 'single', ...
                 'MaximumCount', 2, ...
-                'MinimumBlobArea', 5, ...
+                'MinimumBlobArea', 100, ...
                 'MaximumBlobArea', intmax ...
                 );		
             
@@ -35,26 +32,9 @@ classdef SensorClassBBOX < handle
             KR.hshapeins = vision.ShapeInserter( ...
                 'BorderColor', 'Custom', ...
                 'CustomBorderColor', 65535);
-            
-            KR.htextinsX = vision.TextInserter( ...
-                'Text', '%4d', ...
-                'Location',  [1 1], ...
-                'Color', [255 255 255], ...
-                'FontSize', 16);
-            
-            KR.htextinsY = vision.TextInserter( ...
-                'Text', '%4d', ...
-                'Location',  [1 30], ...
-                'Color', [255 255 255], ...
-                'FontSize', 16);
-            
-            KR.htextinsZ = vision.TextInserter( ...
-                'Text', '%4d', ...
-                'Location',  [1 60], ...
-                'Color', [255 255 255], ...
-                'FontSize', 16);
             Depth=KR.Dn;
             Depth=permute(Depth,[2 1]);
+            figure;
             subplot(1,1,1),KR.h1=imshow(Depth,[0 9000]); colormap();
         end
         %calibrate background
@@ -62,7 +42,7 @@ classdef SensorClassBBOX < handle
             KR.Dn=mxNiDepth(KR.SensorHandles);
         end
         %obtain the drone and ball position
-        function [positionD, positionB] = TrackFrame(KR)
+        function [positionD, positionB] = TrackFrameBBOX(KR)
             
             mxNiUpdateContext(KR.SensorHandles);
             
@@ -115,12 +95,8 @@ classdef SensorClassBBOX < handle
                     end
                 end
             end
-            Depth = step(KR.hshapeins, Depth, bboxD);
+            Depth = step(KR.hshapeins, Depth, bbox);
             Depth = permute(Depth,[2 1]);
-            text = int16(positionD);
-            Depth = step(KR.htextinsX, Depth, text(1));
-            Depth = step(KR.htextinsY, Depth, text(2));
-            Depth = step(KR.htextinsZ, Depth, text(3));
             set(KR.h1,'CDATA',Depth);
             drawnow;
         end
@@ -138,7 +114,7 @@ target(target>filterDepth)=0;
 level=graythresh(target);
 bw=im2bw(target,level);
 %filter for noise
-bw=bwareaopen(bw,50);
-SE = strel('arbitrary', 10);
+bw=bwareaopen(bw,10);
+SE = strel('disk', 50);
 BW = imclose(bw,SE);
 end
