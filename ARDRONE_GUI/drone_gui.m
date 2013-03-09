@@ -188,18 +188,18 @@ function batteryEditText_CreateFcn(hObject, ~, ~)
 function batteryEditBox_Callback(~, ~, ~)
 
 % --- Executes on button press in roundelTrackButton.
-function roundelTrackButton_Callback(~, ~, ~)
+function roundelTrackButton_Callback(~, ~, handles)
 % hObject    handle to roundelTrackButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-controlCenter('trackRoundel');
+controlCenter('trackRoundel', handles);
 
 % --- Executes on button press in closeConnectionButton.
-function closeConnectionButton_Callback(~, ~, ~)
+function closeConnectionButton_Callback(~, ~, handles)
 % hObject    handle to closeConnectionButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-controlCenter('closeConnection');
+controlCenter('closeConnection', handles);
 
 % --- Executes on key press with focus on droneGui or any of its controls.
 function droneGui_WindowKeyPressFcn(hObject, eventdata, handles)
