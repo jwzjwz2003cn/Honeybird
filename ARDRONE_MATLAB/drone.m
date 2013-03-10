@@ -164,14 +164,15 @@ classdef drone < handle
 			
 			yaw_setting = 0;
 			
-			z_max = 0.8;
+			z_max = 0.3;
             
-            for i = 1:200
+            for i = 1:5
                 obj.get_altitude;
                 z_pos = obj.altitude;
                 err_z = z_ref - z_pos;
                 err_z1 = err_z;
-				z_setting = z_setting / 1000;
+                z_setting = Kp*err_z + Ki*(err_z+err_z1) + Kd*(err_z-err_z1)
+				z_setting = z_setting / 1000
                 
                 if (z_setting > z_max)
 					z_setting = z_max;
