@@ -153,6 +153,40 @@ classdef drone < handle
 			
 		end
 		
+		 function move_z(obj,z_ref)
+            Kp = 0.8;
+			Ki = 0.5;
+			Kd = 0;
+
+			z_setting=0;
+			err_z=0;
+			err_z1=0;
+			
+			yaw_setting = 0;
+			
+			z_max = 0.8;
+            
+            for i = 1:200
+                obj.get_altitude;
+                z_pos = obj.altitude;
+                err_z = z_ref - z_pos;
+                err_z1 = err_z;
+				z_setting = z_setting / 1000;
+                
+                if (z_setting > z_max)
+					z_setting = z_max;
+                elseif (z_setting < -z_max)
+					z_setting = -z_max;
+                end
+                
+                if(z_pos < 300 || z_pos > 2000)
+					z_setting = 0;
+                    break
+                end
+                obj.go_up(z_setting);
+            end
+        end
+		
 		% z control
 		function z_moveTo(obj, z_ref)
 			Kp = 0.8;
