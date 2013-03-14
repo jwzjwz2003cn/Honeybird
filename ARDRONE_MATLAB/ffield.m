@@ -2,6 +2,7 @@ classdef ffield < handle;
 
     properties
         ardrone  
+        ardrone_dummy
         goal
         ball
         ball_radius
@@ -16,6 +17,7 @@ classdef ffield < handle;
         drone_path
         new_path
         ball_path
+        eva_path
     end
     
     methods
@@ -23,18 +25,19 @@ classdef ffield < handle;
         function obj = ffield()
             obj.time = 1;
             obj.ardrone = [0,0,10,0,0,0];
+            obj.ardrone_dummy = [0,0,0,0,0,0];
             obj.goal = [70, 12, 10, 0, 0, 0];
-            obj.ball = [35.8, 6.7, 0;
-                        50.0, 30.0, 10];
+            obj.ball = [];
      
             obj.ball_radius = 0;
             
             obj.droneObject = drone;
             obj.droneMoved = false;
             obj.xmlPath = 'C:\Users\Frank\Documents\GitHub\Honeybird\ARDRONE_MATLAB\SamplesConfig.xml';
-            obj.kinect = SensorClassBBOX(obj.xmlPath);
+            obj.kinect = SensorClass(obj.xmlPath);
             obj.calibrate_kinect;
             obj.counter = 0;
+            obj.b_counter = 0;
         end
         
         function drone_cp =  map_drone (obj, drone_pos)%map out the drone's head, left and right control points
@@ -87,8 +90,8 @@ classdef ffield < handle;
         
         function fp = force_rep(obj, ardrone, ball, ball_radius)
             fp = zeros(1,3);
-            rep_const = 0.4;
-            unity_dist = 7;
+            rep_const = 15000;
+            unity_dist = 700;
             ball_size = size(ball);
             
             for i = 1:ball_size(1,1)
@@ -189,52 +192,54 @@ classdef ffield < handle;
         
         function update_dronePos(obj)
             %can probably take out the attraction force
-            [drone_pos, ball_pos] = TrackFrameBBOX(obj.kinect)
-            
+            [drone_pos, ball_pos] = TrackFrame(obj.kinect);
+            %obj.counter = obj.counter + 1;
             
             
          
             
-            if (isempty(drone_pos))
+            if (isempty(drone_pos) || (1 && all(drone_pos == 0)))
                 
                 disp('drone not found');
                 
             else
                 obj.ardrone = [drone_pos',0,0,0];
-                obj.ardrone
-                mapped_drone = obj.map_drone(obj.ardrone); %get kinect drone position
-                obj.counter = obj.counter + 1;
-                obj.drone_path(obj.counter,:) = obj.ardrone(1:3);
-                if (isempty(ball_pos))
+                %obj.ardrone
+                disp('drone detected');
+                %obj.counter = obj.counter + 1;
+                %obj.drone_path(obj.counter,:) = obj.ardrone(1:3);
+                
+                if (isempty(ball_pos) || (1 && all(ball_pos == 0)))
                      disp('balls not detected');
+                    % obj.ardrone_dummy = obj.ardrone;
                 else
                     obj.ball = ball_pos';
-                    obj.ball
-                    
-                    obj.ball_radius = 50;
+                    %obj.ball
+                    obj.b_counter = obj.b_counter +1;
+                    obj.ball_path(obj.b_counter,:) = obj.ball(1,:);
+                    obj.ball_radius = 400;
                     %get kinect ball position and whether there is a ball or not
                     %mapped_goal = obj.map_drone(obj.goal); 
-                    f(1, :) = obj.force_rep(mapped_drone(1,:), obj.ball, obj.ball_radius); % calculate the forces acted on each control points
-                    f(2, :) = obj.force_rep(mapped_drone(2,:), obj.ball, obj.ball_radius);
-                    f(3, :) = obj.force_rep(mapped_drone(3,:), obj.ball, obj.ball_radius);        
-                    head_disp = obj.forceOnhead( obj.ardrone, f(1, :) ); % calculate the change in position for each of the control points affected by the force
-                    left_disp = obj.forceOnleft( obj.ardrone, f(2, :) );
-                    right_disp = obj.forceOnright( obj.ardrone, f(3, :) );
-                    avg_disp = (head_disp+left_disp+right_disp)/3;
-                    obj.ardrone = obj.ardrone + avg_disp;   
-                    coordinate = obj.ardrone(1:3);   %new position
+                    %mapped_drone = obj.map_drone(obj.ardrone_dummy); %get kinect drone position
+                    f_rep = obj.force_rep(drone_pos', obj.ball, obj.ball_radius) % calculate the forces acted on each control points
+                    %f(2, :) = obj.force_rep(mapped_drone(2,:), obj.ball, obj.ball_radius);
+                    %f(3, :) = obj.force_rep(mapped_drone(3,:), obj.ball, obj.ball_radius);        
+                    %head_disp = obj.forceOnhead( obj.ardrone, f(1, :) ); % calculate the change in position for each of the control points affected by the force
+                    %obj.ardrone_dummy = obj.ardrone_dummy + f_rep;   
+                    %obj.ardrone_dummy = obj.ardrone;
+                     if (f_rep(1) ~= 0)
+                        obj.droneObject.roll_left(1);
+                         obj.droneMoved = true;
+                     end
+              
                 
                 end
+                %obj.eva_path(obj.counter,:) = obj.ardrone_dummy(1:3);
+                
             end
+
             
 
-
-            
-            if (obj.ball_radius ~= 0)
-                obj.droneObject.move_forward(1);
-                obj.droneObject.move_forward(1); 
-                obj.droneMoved = true;
-            end
         end
             
         
@@ -245,23 +250,32 @@ classdef ffield < handle;
         
         function run(obj)
             obj.counter = 0;
+            obj.b_counter = 0;
             obj.drone_path = [];
             obj.ball_path = [];
+            obj.eva_path = [];
             obj.ball_radius = 0;
             obj.droneObject.ftrim();
             pause(1);
             obj.droneObject.takeoff();
             while (obj.droneMoved == false)
+                tic;
                 obj.update_dronePos;   %get kinnect position
+                toc;
                % obj.map_drone(obj.ardrone);   %main algorithm
+               if (obj.counter > 500)
+                   break;
+               end
 
             end
             pause(3);
-            obj.droneObject.move_backward(1);
-            obj.droneObject.move_backward(1);
-            pause(2);
             obj.droneObject.land();
+           % pause(5);
+
+            %obj.droneObject.land();
             obj.droneMoved = false;
+            plot3( obj.drone_path(:,1), obj.drone_path(:,2), obj.drone_path(:,3) );
+            plot3( obj.eva_path(:,1), obj.eva_path(:,2), obj.eva_path(:,3) );
         end
         
         function reset(obj)
