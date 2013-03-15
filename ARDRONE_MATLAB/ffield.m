@@ -39,7 +39,9 @@ classdef ffield < handle;
             obj.counter = 0;
             obj.b_counter = 0;
         end
+   
         
+%{        
         function drone_cp =  map_drone (obj, drone_pos)%map out the drone's head, left and right control points
             
             h = 1.4; % drone's dimension constant
@@ -87,17 +89,20 @@ classdef ffield < handle;
             end
             
         end
-        
+    %}    
         function fp = force_rep(obj, ardrone, ball, ball_radius)
             fp = zeros(1,3);
-            rep_const = 15000;
-            unity_dist = 700;
+            rep_const = 200;
+            unity_dist = 2400;
+            bp = 270;
+            gain = 100;
             ball_size = size(ball);
             
             for i = 1:ball_size(1,1)
                 d = obj.find_distance(ardrone, ball(i,:))- ball_radius;
                 if (d < unity_dist)
-                    fp = fp + rep_const * (1/unity_dist - 1/d)/(d^2)*(ball(i,:)- ardrone); 
+                   % fp = fp + rep_const * (1/unity_dist - 1/d)/(d^2)*(ball(i,:)- ardrone); 
+                   fp = fp + (1/(d-bp))*((ball(i,:)- ardrone)/d*3);
                 else
                     fp = fp; %if too far, no force acting on it
                 end
@@ -113,7 +118,7 @@ classdef ffield < handle;
             dist = sqrt(d_x^2 + d_y^2 +d_z^2);
         end
         
-        
+%{        
         function drone_disp = forceOnhead(obj, drone_pos, force)
             
             drone_disp = zeros(1,6);
@@ -189,7 +194,7 @@ classdef ffield < handle;
             dist = (dist_head + dist_left + dist_right)/3;
             
         end
-        
+%}        
         function update_dronePos(obj)
             %can probably take out the attraction force
             [drone_pos, ball_pos] = TrackFrame(obj.kinect);
@@ -217,7 +222,7 @@ classdef ffield < handle;
                     %obj.ball
                     obj.b_counter = obj.b_counter +1;
                     obj.ball_path(obj.b_counter,:) = obj.ball(1,:);
-                    obj.ball_radius = 400;
+                    obj.ball_radius = 40;
                     %get kinect ball position and whether there is a ball or not
                     %mapped_goal = obj.map_drone(obj.goal); 
                     %mapped_drone = obj.map_drone(obj.ardrone_dummy); %get kinect drone position
@@ -228,6 +233,7 @@ classdef ffield < handle;
                     %obj.ardrone_dummy = obj.ardrone_dummy + f_rep;   
                     %obj.ardrone_dummy = obj.ardrone;
                      if (f_rep(1) ~= 0)
+                        obj.droneObject.roll_left(1);
                         obj.droneObject.roll_left(1);
                          obj.droneMoved = true;
                      end
@@ -274,8 +280,8 @@ classdef ffield < handle;
 
             %obj.droneObject.land();
             obj.droneMoved = false;
-            plot3( obj.drone_path(:,1), obj.drone_path(:,2), obj.drone_path(:,3) );
-            plot3( obj.eva_path(:,1), obj.eva_path(:,2), obj.eva_path(:,3) );
+           % plot3( obj.drone_path(:,1), obj.drone_path(:,2), obj.drone_path(:,3) );
+            %plot3( obj.eva_path(:,1), obj.eva_path(:,2), obj.eva_path(:,3) );
         end
         
         function reset(obj)
