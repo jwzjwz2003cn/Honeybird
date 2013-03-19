@@ -75,7 +75,7 @@ while(1)
         D=mxNiDepth(KinectHandles);
         
         image = D;
-        y = threshDepth(Dn,image);
+        y = threshDepth(D,image);
         [centroidD, bboxD] = step(hblobD, y);
         
         if (isempty(centroidD))

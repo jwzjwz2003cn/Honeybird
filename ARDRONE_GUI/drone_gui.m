@@ -22,7 +22,7 @@ function varargout = drone_gui(varargin)
 
 % Edit the above text to modify the response to help drone_gui
 
-% Last Modified by GUIDE v2.5 10-Feb-2013 20:04:28
+% Last Modified by GUIDE v2.5 09-Mar-2013 20:37:08
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -345,3 +345,116 @@ set(handles.debugOutput_Text, 'string', cat(1, actionMessage, get(handles.debugO
 
 
 
+
+
+% --- Executes on button press in pushbutton20.
+function pushbutton20_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton20 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton21.
+function pushbutton21_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton21 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton22.
+function pushbutton22_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton22 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+
+function editRoll_Callback(hObject, eventdata, handles)
+% hObject    handle to editRoll (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editRoll as text
+%        str2double(get(hObject,'String')) returns contents of editRoll as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editRoll_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editRoll (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function editPitch_Callback(hObject, eventdata, handles)
+% hObject    handle to editPitch (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editPitch as text
+%        str2double(get(hObject,'String')) returns contents of editPitch as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editPitch_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editPitch (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function editYaw_Callback(hObject, eventdata, handles)
+% hObject    handle to editYaw (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editYaw as text
+%        str2double(get(hObject,'String')) returns contents of editYaw as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editYaw_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editYaw (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function editAltitude_Callback(hObject, eventdata, handles)
+% hObject    handle to editAltitude (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of editAltitude as text
+%        str2double(get(hObject,'String')) returns contents of editAltitude as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function editAltitude_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editAltitude (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
