@@ -8,7 +8,7 @@ while(1)
     disp('-----');
     tic;
     [posD, posB] = TrackFrameBBOX(KR)
-    %elapsedTime = elapsedTime + toc
+    elapsedTime = elapsedTime + toc
     toc;
     %data(j,1) = elapsedTime;
     %if( size(posD) ~= 0 )
