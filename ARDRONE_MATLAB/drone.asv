@@ -490,7 +490,7 @@ classdef drone < handle
             obj.ARcontrol.at_pcmd(prog_cmd,roll_dec,pitch_dec,z_dec,yaw_dec);
         end
         
-        function xyzyaw_z(obj,roll_set,pitch_set,z_set,yaw_set)
+        function xyzyaw(obj,roll_set,pitch_set,z_set,yaw_set)
             roll_dec = (obj.float2dec(roll_set));
             pitch_dec = (obj.float2dec(pitch_set));
             z_dec = (obj.float2dec(z_set));

@@ -35,6 +35,13 @@ classdef control < handle
             obj.seq = obj.seq+1;
         end
         
+        function at_pcmd_delay(obj, progressive, lr, fb, ud, rot) %(left/right, front/back, up/down, rotation)
+            
+            PCMD = sprintf('AT*PCMD=%u,%d,%d,%d,%d,%d\r',obj.seq, progressive,lr,fb,ud,rot); 
+            obj.sendcmd_delay(PCMD);
+            obj.seq = obj.seq+1;
+        end
+        
         function at_ftrim(obj)
             FTRIM = sprintf('AT*PCMD=%d,\r',obj.seq);
             obj.sendcmd(FTRIM);
@@ -100,8 +107,16 @@ classdef control < handle
         function sendcmd(obj, cmd_arg)
              for i = 1:3 %send 3 times with 0.02 sec interval to ensure data integrity
                 fprintf(obj.ARc, cmd_arg); 
-                pause(0.02);
+
              end            
+        end
+        
+        function sendcmd_delay(obj, cmd_arg)
+             for i = 1:3 %send 3 times with 0.02 sec interval to ensure data integrity
+                fprintf(obj.ARc, cmd_arg); 
+                pause(0.02);
+             end                  
+            
         end
         
         function reset_port(obj)

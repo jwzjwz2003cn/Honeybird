@@ -36,7 +36,7 @@ classdef ffield < handle;
             obj.droneObject = drone;
             obj.droneMoved = false;
             obj.xmlPath = 'C:\Users\Frank\Documents\GitHub\Honeybird\ARDRONE_MATLAB\SamplesConfig.xml';
-            obj.kinect = SensorClassBBOX(obj.xmlPath);
+            obj.kinect = SensorClass(obj.xmlPath);
             obj.calibrate_kinect;
             obj.counter = 0;
             obj.b_counter = 0;
@@ -110,10 +110,8 @@ classdef ffield < handle;
     %}    
         function fp = force_rep(obj, ardrone, ball, ball_radius)
             fp = zeros(1,3);
-            rep_const = 200;
-            unity_dist = 2000;
-            bp = 270;
-            gain = 100;
+            unity_dist = 2600;
+            bp = 70;
             ball_size = size(ball);
             
             for i = 1:ball_size(1,1)
@@ -215,7 +213,7 @@ classdef ffield < handle;
 %}        
         function update_dronePos(obj)
             %can probably take out the attraction force
-            [drone_pos, ball_pos] = TrackFrameBBOX(obj.kinect);
+            [drone_pos, ball_pos] = TrackFrame(obj.kinect);
             obj.counter = obj.counter + 1;
             
             
@@ -287,18 +285,18 @@ classdef ffield < handle;
             pause(1);
             obj.droneObject.takeoff();
             pause(5);
-            obj.move_z(1500);
+            obj.move_z(1200);
             while (obj.droneMoved == false)
                 tic;
                 obj.update_dronePos;   %get kinnect position
                 toc;
                % obj.map_drone(obj.ardrone);   %main algorithm
-               if (obj.counter > 200)
+               if (obj.counter > 160)
                    break;
                end
 
             end
-            pause(3);
+            pause(1);
             obj.droneObject.land();
            % pause(5);
 
@@ -581,9 +579,9 @@ classdef ffield < handle;
 			
 			yaw_setting = 0;
 			
-			z_max = 0.3;
+			z_max = 0.5;
             
-            for i = 1:5
+            for i = 1:10
                 obj.droneObject.get_altitude;
                 z_pos = obj.droneObject.altitude;
                 err_z = z_ref - z_pos;
@@ -604,7 +602,7 @@ classdef ffield < handle;
                     break
                 end
                 
-                obj.droneObject.xyzyaw(0,0,z_setting,0)
+                obj.droneObject.xyzyaw_z(0,0,z_setting,0)
             end
         end	
         
