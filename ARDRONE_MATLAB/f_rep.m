@@ -2,7 +2,7 @@ function force = f_rep( work, obs, radius )
 
 force = zeros(1, 3 );
 
-Q = 1;
+Q = 1000;
 c_rel = 0.05;
 
 force = 0;

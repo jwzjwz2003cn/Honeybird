@@ -100,6 +100,6 @@ level=graythresh(target);
 bw=im2bw(target,level);
 %filter for noise
 bw=bwareaopen(bw,10);
-SE = strel('disk', 50);
+SE = strel('disk', 100);
 BW = imclose(bw,SE);
 end

@@ -481,6 +481,15 @@ classdef drone < handle
             obj.vz = obj.ARnav.decode_vz; 
         end
         
+        function xyzyaw(obj,roll_set,pitch_set,z_set,yaw_set)
+            roll_dec = (obj.float2dec(roll_set));
+            pitch_dec = (obj.float2dec(pitch_set));
+            z_dec = (obj.float2dec(z_set));
+            yaw_dec = (obj.float2dec(yaw_set));
+            prog_cmd = 1;
+            obj.ARcontrol.at_pcmd(prog_cmd,roll_dec,pitch_dec,z_dec,yaw_dec);
+        end
+        
         function track_roundel(obj)
             obj.reset_wdg();
             obj.ARcontrol.at_flymode();

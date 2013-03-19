@@ -60,7 +60,7 @@ if isempty(cmdString)
     error(message('MATLAB:python:NopythonCommand'));
 elseif ispc
     % PC
-    pythonCmd = fullfile(matlabroot, 'sys\python\win32\bin\');
+    pythonCmd = fullfile(matlabroot, 'C:\Python27');
     cmdString = ['python' cmdString];
     pythonCmd = ['set PATH=',pythonCmd, ';%PATH%&' cmdString];
     [status, result] = dos(pythonCmd);
